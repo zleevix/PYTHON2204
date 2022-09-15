@@ -1,0 +1,103 @@
+{% extends 'base/__base.html' %}
+{% block title %}
+	Shopping Cart
+{% endblock title %}
+
+{% block content %}
+{% load humanize %}
+<style>
+	.image {
+		width: 150px;
+	}
+	#total{ 
+		background: #E6E4DF;
+		color: #696763;
+		margin-top: 10px;
+	}
+	#sum_all_total {
+		color: #FE980F;
+    	font-size: 30px;
+	}
+	#message_total {
+		color: #363432;
+		font-family: 'Roboto',sans-serif;
+		font-size: 20px;
+		font-weight: normal;
+		text-align: right;
+	}
+	a.btn {
+		margin-top: unset;
+	}
+</style>
+	<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+					<li><a href="#">Home</a></li>
+					<li class="active">Shopping Cart</li>
+				</ol>
+			</div>
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Item</td>
+							<td class="description"></td>
+							<td class="price">Price</td>
+							<td class="quantity">Quantity</td>
+							<td class="total">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						{% if message %}
+							<td colspan="6">{{ message }}</td>
+						{% else %}
+							{% for orderdetail in data_orderdetail %}
+								<tr>
+									<td class="cart_product">
+										<a href="{% url 'view_product' product_id=orderdetail.product.id %}"><img src="{{ orderdetail.product.image }}" width="100px" alt=""></a>
+									</td>
+									<td class="cart_description">
+										<h4><a href="">{{ orderdetail.product.name }}</a></h4>
+										<p>Web ID: 108977{{ orderdetail.product.id }}</p>
+									</td>
+									<td class="cart_price">
+										<p>{{ orderdetail.product.price|intcomma }}đ</p>
+									</td>
+									<td class="cart_quantity">
+										<div class="cart_quantity_button">
+											<a class="cart_quantity_up" href="{% url 'change_product_quantity' action='increase' product_id=orderdetail.product.id %}"> + </a>
+											<input class="cart_quantity_input" disabled type="text" name="quantity" value="{{orderdetail.quantity}}"
+												autocomplete="off" size="2">
+											<a class="cart_quantity_down" href="{% url 'change_product_quantity' action='decrease' product_id=orderdetail.product.id %}"> - </a>
+										</div>
+									</td>
+									<td class="cart_total">
+										<p class="cart_total_price">{{ orderdetail.amount|intcomma }}đ</p>
+									</td>
+									<td class="cart_delete">
+										<a class="cart_quantity_delete" href="{% url 'delete_product_in_cart' product_id=orderdetail.product.id %}"><i class="fa fa-times"></i></a>
+									</td>
+								</tr>
+							{% endfor %}
+							<tr id="total">
+								<td id="message_total" colspan="4">Tổng tiền</td>
+								<td id="sum_all_total" colspan="2">{{total_amount|intcomma}} đ</td>
+							</tr>
+							<tr>
+								<td colspan="4"></td>
+								<td colspan="2">
+									<a href="{% url 'checkout' %}" class="btn btn-default btn-block btn-large get">Checkout</a>
+								</td>
+							</tr>
+						{% endif %}
+						
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+	<!--/#cart_items-->
+{% endblock content %}

@@ -1,0 +1,83 @@
+{% extends 'base/__base.html' %}
+
+{% block title %}
+	Checkout
+{% endblock title %}
+
+{% block content %}
+{% load static %}
+{% load humanize %}
+<section id="cart_items">
+	<div class="container">
+		<div class="breadcrumbs">
+			<ol class="breadcrumb">
+			  <li><a href="#">Home</a></li>
+			  <li class="active">Check out</li>
+			</ol>
+		</div><!--/breadcrums-->
+
+		
+		<div class="register-req">
+			<p>Please use Register And Checkout to easily get access to your order history, or use Checkout as Guest</p>
+		</div><!--/register-req-->
+
+		<div class="shopper-informations">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-one">
+						<form method="POST">
+							{% csrf_token %}
+							<input name="phone" type="text" placeholder="Số điện thoại">
+							<input name="address" type="text" placeholder="Địa chỉ">
+							<button class="btn btn-default btn-block btn-large get" type="submit">Submit</button>
+						</form>
+					</div>	
+				</div>
+				
+			</div>
+		</div>
+		<div class="review-payment">
+			<h2>Review & Payment</h2>
+		</div>
+
+		<div class="table-responsive cart_info">
+			<table class="table table-condensed">
+				<thead>
+					<tr class="cart_menu">
+						<td class="image">Item</td>
+						<td class="description"></td>
+						<td class="price">Price</td>
+						<td class="quantity">Quantity</td>
+						<td class="total">Total</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for orderdetail in data_orderdetail %}
+						<tr>
+							<td class="cart_product">
+								<a href="{% url 'view_product' product_id=orderdetail.product.id %}"><img src="{{ orderdetail.product.image }}" width="100px" alt=""></a>
+							</td>
+							<td class="cart_description">
+								<h4><a href="">{{ orderdetail.product.name }}</a></h4>
+								<p>Web ID: 108977{{ orderdetail.product.id }}</p>
+							</td>
+							<td class="cart_price">
+								<p>{{ orderdetail.product.price|intcomma }}đ</p>
+							</td>
+							<td class="cart_quantity">
+								<div class="cart_quantity_button">
+									{{orderdetail.quantity}}
+								</div>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price">{{ orderdetail.amount|intcomma }}đ</p>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section> <!--/#cart_items-->
+
+{% endblock content %}

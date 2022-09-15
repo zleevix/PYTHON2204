@@ -1,0 +1,31 @@
+{% extends 'base/__base.html' %}
+{% block title %}
+    Đăng Nhập Hệ Thống
+{% endblock title %}
+
+{% block content %}
+    {% load static %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <img class="img-fluid" src="{% static 'images/pythondjango.jpeg' %}" alt="">
+            </div>
+            <div class="col-sm-4">
+                {% if message %} <!-- Đăng nhập sai -->
+                    <h4 style="color:red">{{message}}</h4>
+                {% endif %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                            <div class="form-group">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                    {% endfor %}
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="Login">
+                </form>
+                <p>Bạn chưa có tài khoản ? <a href="{% url 'register_user' %}">Bấm vào đây để tạo</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
